@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AutoKiosk</title>
+</head>
+<body>
+    <h1>Форма для ввода URL</h1>
+    <form method="post" action="/">
+        <label for="url_input">URL:</label>
+        <input type="text" id="url_input" name="url">
+        <button type="submit" name="action" value="open">Открыть</button>
+        <button type="submit" name="action" value="close">Закрыть</button>
+    </form>
+    
+    <h2>Последние 10 записей:</h2>
+    <ul>
+        {% for entry in entries %}
+            <li>{{ entry.url }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
