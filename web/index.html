@@ -15,7 +15,11 @@
     <h2>Последние 10 записей:</h2>
     <ul>
         {% for entry in entries %}
-            <li>{{ entry.url }}</li>
+            <li><form method="post" action="/">
+                <input type="text" id="url_input" name="url" value="{{ entry.url }}" readonly="readonly">
+                <button type="submit" name="action" value="open">Открыть</button>
+            </form>
+            </li>
         {% endfor %}
     </ul>
 </body>

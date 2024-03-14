@@ -32,7 +32,6 @@ def index():
                 start_webview(check_and_add_protocol(url))
         elif request.form['action'] == 'close':
             kill_children_pids()
-            pass
 
     entries = Entry.query.order_by(Entry.id.desc()).limit(10).all()
     return render_template('index.html', entries=entries)
@@ -58,4 +57,4 @@ def check_and_add_protocol(url):
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host="0.0.0.0", port=8080, debug=False)
