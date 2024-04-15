@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 import subprocess
 from flask import Flask, render_template, request
 from flask_sqlalchemy import SQLAlchemy
@@ -29,9 +30,14 @@ def index():
                 new_entry = Entry(url=url)
                 db.session.add(new_entry)
                 db.session.commit()
+                kill_children_pids()
                 start_webview(check_and_add_protocol(url))
         elif request.form['action'] == 'close':
             kill_children_pids()
+        elif request.form['action'] == 'reopen':
+            kill_children_pids()
+            last_record = Entry.query.order_by(Entry.id.desc()).first()
+            start_webview(check_and_add_protocol(last_record))
 
     entries = Entry.query.order_by(Entry.id.desc()).limit(10).all()
     return render_template('index.html', entries=entries)
@@ -39,6 +45,7 @@ def index():
 
 def start_webview(link):
     try:
+        print("Open WebView: "+ link)
         p = subprocess.Popen(["python3",KIOSK_PATH, "--url", link], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     except Exception as e:
         print(f'Error opening WebView: {e}')
@@ -49,7 +56,7 @@ def kill_children_pids():
 
 def check_and_add_protocol(url):
     url = urllib.parse.unquote(url)
-    print('check_and_add_protocol', url)
+    # print('check_and_add_protocol', url)
     if not url.startswith('http://') and not url.startswith('https://'):
         url = 'https://' + url
     return url
