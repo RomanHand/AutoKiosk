@@ -14,7 +14,11 @@ db = SQLAlchemy(app)
 
 
 
-class Entry(db.Model):
+class History(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    url = db.Column(db.String(255), nullable=False)
+
+class Favorite(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     url = db.Column(db.String(255), nullable=False)
 
@@ -27,20 +31,34 @@ def index():
         if request.form['action'] == 'open':
             url = request.form['url']
             if url != "":
-                new_entry = Entry(url=url)
-                db.session.add(new_entry)
+                new_History = History(url=url)
+                db.session.add(new_History)
                 db.session.commit()
                 kill_children_pids()
                 start_webview(check_and_add_protocol(url))
         elif request.form['action'] == 'close':
             kill_children_pids()
         elif request.form['action'] == 'reopen':
+            last_record = History.query.order_by(History.id.desc()).first().url
+            print(last_record)
             kill_children_pids()
-            last_record = Entry.query.order_by(Entry.id.desc()).first()
             start_webview(check_and_add_protocol(last_record))
+            
+        elif request.form['action'] == 'favorite':
+            url = request.form['url']
+            if Favorite.query.filter_by(url=url).first() == None:
+                new_Favorite = Favorite(url=url)
+                db.session.add(new_Favorite)
+                db.session.commit()
+        elif request.form['action'] == 'del':
+            url = request.form['url']
+            rm_Favorite = Favorite.query.filter_by(url=url).first()
+            db.session.delete(rm_Favorite)
+            db.session.commit()
 
-    entries = Entry.query.order_by(Entry.id.desc()).limit(10).all()
-    return render_template('index.html', entries=entries)
+    favorites = Favorite.query.order_by(Favorite.id.desc()).all()
+    histories = History.query.order_by(History.id.desc()).limit(10).all()
+    return render_template('index.html', histories=histories, favorites=favorites )
 
 
 def start_webview(link):
@@ -60,8 +78,6 @@ def check_and_add_protocol(url):
     if not url.startswith('http://') and not url.startswith('https://'):
         url = 'https://' + url
     return url
-
-
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=8080, debug=False)

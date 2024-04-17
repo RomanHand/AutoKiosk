@@ -13,15 +13,29 @@
         <button type="submit" name="action" value="reopen">Перезагрузить</button>
     </form>
     
+    <h2>Избранное</h2>
+    <ul>
+        {% for favorite in favorites %}
+            <li>
+            <form method="post" action="/">
+                <input type="text" id="url_input" name="url" value="{{ favorite.url }}" readonly="readonly">
+                <button type="submit" name="action" value="open">Открыть</button>
+                <button type="submit" name="action" value="del">Удалить</button>
+            </form>
+            </li>
+        {% endfor %}
+    </ul>
+
     <h2>Последние 10 записей:</h2>
     <ul>
-        {% for entry in entries %}
-            <!-- <li> -->
+        {% for history in histories %}
+            <li>
             <form method="post" action="/">
-                <input type="text" id="url_input" name="url" value="{{ entry.url }}" readonly="readonly">
+                <input type="text" id="url_input" name="url" value="{{ history.url }}" readonly="readonly">
                 <button type="submit" name="action" value="open">Открыть</button>
+                <button type="submit" name="action" value="favorite">Добавить в избранное</button>
             </form>
-            <!-- </li> -->
+            </li>
         {% endfor %}
     </ul>
 </body>
