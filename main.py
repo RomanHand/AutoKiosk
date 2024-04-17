@@ -7,12 +7,9 @@ import urllib.parse
 
 
 KIOSK_PATH = "./kiosk.py"
-
 app = Flask(__name__, template_folder='web/')
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.db'
 db = SQLAlchemy(app)
-
-
 
 class History(db.Model):
     id = db.Column(db.Integer, primary_key=True)
