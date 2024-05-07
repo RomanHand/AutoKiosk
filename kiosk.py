@@ -14,7 +14,7 @@ def main():
     parser.add_argument('--url', metavar='str', type=str, help='site url')
     parser.add_argument('--width', metavar='int', type=int, help='width screen', default=resolution[0])
     parser.add_argument('--height', metavar='int', type=int, help='height screen', default=resolution[1])
-    parser.add_argument('--screen', metavar='int', type=int, help='number screen', default=1)
+    parser.add_argument('--screen', metavar='int', type=int, help='number screen', default=0)
 
     args = parser.parse_args()
     if args.url == None:

@@ -2,6 +2,96 @@
 <html>
 <head>
     <title>AutoKiosk</title>
+    <style>
+		/* Сброс стилей и полезные утилиты */
+		*,
+		*::before,
+		*::after {
+			box-sizing: border-box;
+		}
+
+		/* Основные стили */
+		body {
+			font-family: 'Inter', sans-serif;
+			background-color: #f7fafc;
+			color: #4a5568;
+			padding: 2rem;
+		}
+
+		/* Типографика */
+		h1, h2 {
+			font-weight: 700;
+			line-height: 1.125;
+			margin-bottom: 1.5rem;
+		}
+
+		h1 {
+			font-size: 2.25rem;
+		}
+
+		h2 {
+			font-size: 1.5rem;
+		}
+
+		/* Формы */
+		label {
+			display: block;
+			margin-bottom: .75rem;
+			font-weight: 500;
+		}
+
+		input[type="text"] {
+			display:flexbox;
+			width: 30%;
+			padding: .5rem .75rem;
+			border-width: 1px;
+			border-radius: .25rem;
+			border-color: #e2e8f0;
+			margin-bottom: 1rem;
+		}
+
+		input[type="text"]:focus {
+			outline: none;
+			border-color: #63b3ed;
+			ring: #63b3ed;
+		}
+
+		/* Кнопки */
+		button {
+			padding: .5rem 1rem;
+			background-color: #4299e1;
+			color: #fff;
+			font-weight: 600;
+			border-radius: .25rem;
+			border: none;
+			cursor: pointer;
+			transition: background-color .3s ease-in-out;
+		}
+
+		button:hover {
+			background-color: #3182ce;
+		}
+
+		/* Списки */
+		ul {
+			list-style-type: none;
+			padding: 0;
+		}
+
+		ul li {
+			background-color: #fff;
+			border-width: 1px;
+			border-color: #e2e8f0;
+			border-radius: .25rem;
+			padding: .5rem .75rem;
+			margin-bottom: .75rem;
+			transition: background-color .3s;
+		}
+
+		ul li:hover {
+			background-color: #edf2f7;
+		}
+	</style>
 </head>
 <body>
     <h1>Форма для ввода URL</h1>

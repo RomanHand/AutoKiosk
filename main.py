@@ -4,11 +4,16 @@ from flask import Flask, render_template, request
 from flask_sqlalchemy import SQLAlchemy
 import os
 import urllib.parse
+import yaml
+
+CONFIG_PATH = "/etc/webview-server/config.yml"
+KIOSK_PATH = "/usr/local/bin/kiosk"
+WWW_PATH = "/var/webview-server/www/"
+DB_PATH = "/etc/webview-server"
 
 
-KIOSK_PATH = "./kiosk.py"
-app = Flask(__name__, template_folder='web/')
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.db'
+app = Flask("wv-server", template_folder='web/')
+app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_PATH}/data.db'
 db = SQLAlchemy(app)
 
 class History(db.Model):
@@ -57,7 +62,6 @@ def index():
     histories = History.query.order_by(History.id.desc()).limit(10).all()
     return render_template('index.html', histories=histories, favorites=favorites )
 
-
 def start_webview(link):
     try:
         print("Open WebView: "+ link)
@@ -76,5 +80,20 @@ def check_and_add_protocol(url):
         url = 'https://' + url
     return url
 
+def parse_config():
+
+    try:
+        with open(CONFIG_PATH, 'r') as file:
+            config = yaml.safe_load(file)
+        http_port = config["network"]['port']
+        http_address = config["network"]['listen_ip']
+    except: 
+        print("Config error, set default vars")
+        http_port = 80
+        http_address = "0.0.0.0"
+
+    return http_port,http_address
+
 if __name__ == '__main__':
-    app.run(host="0.0.0.0", port=8080, debug=False)
+    http_port,http_address = parse_config()
+    app.run(host=http_address, port=http_port, debug=False)
