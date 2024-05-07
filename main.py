@@ -8,11 +8,10 @@ import yaml
 
 CONFIG_PATH = "/etc/webview-server/config.yml"
 KIOSK_PATH = "/usr/local/bin/kiosk"
-WWW_PATH = "/var/webview-server/www/"
-DB_PATH = "/etc/webview-server"
+WWW_PATH = "/webview-server/www/"
+DB_PATH = "/webview-server"
 
-
-app = Flask("wv-server", template_folder='web/')
+app = Flask("wv-server", template_folder=WWW_PATH)
 app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_PATH}/data.db'
 db = SQLAlchemy(app)
 
