@@ -1,8 +1,6 @@
-
 [Desktop Entry]
 Name=kiosk
 Comment=WebView Server
-Exec=
+Exec=/usr/local/bin/wv-server
 TryExec=/usr/local/bin/wv-server
 Icon=
-Type=Application
