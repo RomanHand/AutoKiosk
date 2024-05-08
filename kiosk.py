@@ -3,13 +3,14 @@ import webview
 import argparse
 import screeninfo
 
-def get_screen_resolution():
-    screen_info = screeninfo.get_monitors()[0]
-    return (screen_info.width, screen_info.height)
+#def get_screen_resolution():
+#    screen_info = screeninfo.get_monitors()[0]
+#    return (screen_info.width, screen_info.height)
 
 
 def main():
-    resolution = get_screen_resolution()
+ #   resolution = get_screen_resolution()
+    resolution = [1920, 1080]
     parser = argparse.ArgumentParser()
     parser.add_argument('--url', metavar='str', type=str, help='site url')
     parser.add_argument('--width', metavar='int', type=int, help='width screen', default=resolution[0])
