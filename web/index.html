@@ -3,14 +3,12 @@
 <head>
     <title>AutoKiosk</title>
     <style>
-		/* Сброс стилей и полезные утилиты */
 		*,
 		*::before,
 		*::after {
 			box-sizing: border-box;
 		}
 
-		/* Основные стили */
 		body {
 			font-family: 'Inter', sans-serif;
 			background-color: #f7fafc;
@@ -18,7 +16,6 @@
 			padding: 2rem;
 		}
 
-		/* Типографика */
 		h1, h2 {
 			font-weight: 700;
 			line-height: 1.125;
@@ -33,7 +30,6 @@
 			font-size: 1.5rem;
 		}
 
-		/* Формы */
 		label {
 			display: block;
 			margin-bottom: .75rem;
@@ -56,7 +52,6 @@
 			ring: #63b3ed;
 		}
 
-		/* Кнопки */
 		button {
 			padding: .5rem 1rem;
 			background-color: #4299e1;
@@ -72,7 +67,6 @@
 			background-color: #3182ce;
 		}
 
-		/* Списки */
 		ul {
 			list-style-type: none;
 			padding: 0;
@@ -95,13 +89,18 @@
 </head>
 <body>
     <h1>Форма для ввода URL</h1>
-    <form method="post" action="/">
-        <label for="url_input">URL:</label>
-        <input type="text" id="url_input" name="url">
-        <button type="submit" name="action" value="open">Открыть</button>
-        <button type="submit" name="action" value="close">Закрыть</button>
-        <button type="submit" name="action" value="reopen">Перезагрузить</button>
-    </form>
+	<form method="post" action="/">
+		<label for="url_input">Введите одну или несколько ссылок (через запятую или с новой строки):</label>
+		<textarea id="url_input" name="url" rows="4" style="width: 50%;" placeholder="Пример:
+	https://dns-shop.ru
+	или
+	https://site1.ru, https://site2.ru"></textarea>
+		<br>
+		<small>Можно вводить сразу несколько ссылок: разделяйте их переносом строки или запятой.</small><br><br>
+		<button type="submit" name="action" value="open">Открыть</button>
+		<button type="submit" name="action" value="close">Закрыть</button>
+		<button type="submit" name="action" value="reopen">Перезагрузить</button>
+	</form>
     
     <h2>Избранное</h2>
     <ul>
