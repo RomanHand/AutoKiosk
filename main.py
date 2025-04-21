@@ -1,10 +1,13 @@
 #!/usr/bin/python3
-import subprocess
-from flask import Flask, render_template, request
-from flask_sqlalchemy import SQLAlchemy
+"""Main server script for Flask web interface."""
 import os
+import sys
 import urllib.parse
+import subprocess
 import yaml
+
+from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
 
 CONFIG_PATH = "/etc/webview-server/config.yml"
 KIOSK_PATH = "/usr/local/bin/kiosk"
@@ -44,7 +47,7 @@ def index():
             print(last_record)
             kill_children_pids()
             start_webview(check_and_add_protocol(last_record))
-            
+
         elif request.form['action'] == 'favorite':
             url = request.form['url']
             if Favorite.query.filter_by(url=url).first() == None:
@@ -64,7 +67,8 @@ def index():
 def start_webview(link):
     try:
         print("Open WebView: "+ link)
-        p = subprocess.Popen(["python3",KIOSK_PATH, "--url", link], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        p = subprocess.Popen(["python3",KIOSK_PATH, "--url", link], stdout=subprocess.PIPE, 
+                            stderr=subprocess.PIPE)
     except Exception as e:
         print(f'Error opening WebView: {e}')
 
