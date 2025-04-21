@@ -1,7 +1,6 @@
 #!/usr/bin/python3
 """Main server script for Flask web interface."""
 import os
-import sys
 import urllib.parse
 import subprocess
 import yaml

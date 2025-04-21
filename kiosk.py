@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+"""Script for run webview."""
 import webview
 import argparse
 import screeninfo
