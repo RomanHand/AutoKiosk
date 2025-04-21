@@ -31,43 +31,46 @@ with app.app_context():
 @app.route('/', methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':
-        if request.form['action'] == 'open':
-            url = request.form['url']
-            if url != "":
-                new_History = History(url=url)
-                db.session.add(new_History)
+        action = request.form['action']
+        raw_input = request.form.get('url', '').strip()
+
+        if action == 'open' and raw_input:
+            urls = [check_and_add_protocol(u.strip()) for part in raw_input.splitlines() for u in part.split(',') if u.strip()]
+            if urls:
+                db.session.add(History(url=raw_input))
                 db.session.commit()
                 kill_children_pids()
-                start_webview(check_and_add_protocol(url))
-        elif request.form['action'] == 'close':
-            kill_children_pids()
-        elif request.form['action'] == 'reopen':
-            last_record = History.query.order_by(History.id.desc()).first().url
-            print(last_record)
-            kill_children_pids()
-            start_webview(check_and_add_protocol(last_record))
+                start_webview_multiple(urls)
 
-        elif request.form['action'] == 'favorite':
-            url = request.form['url']
-            if Favorite.query.filter_by(url=url).first() == None:
-                new_Favorite = Favorite(url=url)
-                db.session.add(new_Favorite)
+        elif action == 'close':
+            kill_children_pids()
+
+        elif action == 'reopen':
+            last_record = History.query.order_by(History.id.desc()).first()
+            if last_record:
+                kill_children_pids()
+                start_webview_multiple([check_and_add_protocol(last_record.url)])
+
+        elif action == 'favorite':
+            if raw_input and not Favorite.query.filter_by(url=raw_input).first():
+                db.session.add(Favorite(url=raw_input))
                 db.session.commit()
-        elif request.form['action'] == 'del':
-            url = request.form['url']
-            rm_Favorite = Favorite.query.filter_by(url=url).first()
-            db.session.delete(rm_Favorite)
-            db.session.commit()
+
+        elif action == 'del':
+            rm_Favorite = Favorite.query.filter_by(url=raw_input).first()
+            if rm_Favorite:
+                db.session.delete(rm_Favorite)
+                db.session.commit()
 
     favorites = Favorite.query.order_by(Favorite.id.desc()).all()
     histories = History.query.order_by(History.id.desc()).limit(10).all()
-    return render_template('index.html', histories=histories, favorites=favorites )
+    return render_template('index.html', histories=histories, favorites=favorites)
+
 
 def start_webview(link):
     try:
         print("Open WebView: "+ link)
-        p = subprocess.Popen(["python3",KIOSK_PATH, "--url", link], stdout=subprocess.PIPE, 
-                            stderr=subprocess.PIPE)
+        p = subprocess.Popen(["python3",KIOSK_PATH, "--urls"] + link, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     except Exception as e:
         print(f'Error opening WebView: {e}')
 
@@ -95,6 +98,14 @@ def parse_config():
         http_address = "0.0.0.0"
 
     return http_port,http_address
+
+def start_webview_multiple(urls):
+    try:
+        args = ["python3", KIOSK_PATH, "--urls"] + urls
+        print(f"Open multiple WebViews: {urls}")
+        subprocess.Popen(args, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    except Exception as e:
+        print(f'Error opening multiple WebViews: {e}')
 
 if __name__ == '__main__':
     http_port,http_address = parse_config()
