@@ -1,4 +1,6 @@
 #!/usr/bin/python3
+
+"""Script for running a webview window with a URL."""
 import webview
 import argparse
 from screeninfo import get_monitors

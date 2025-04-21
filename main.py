@@ -1,10 +1,12 @@
 #!/usr/bin/python3
-import subprocess
-from flask import Flask, render_template, request
-from flask_sqlalchemy import SQLAlchemy
+"""Main server script for Flask web interface."""
 import os
 import urllib.parse
+import subprocess
 import yaml
+
+from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
 
 CONFIG_PATH = "/etc/webview-server/config.yml"
 KIOSK_PATH = "/usr/local/bin/kiosk"

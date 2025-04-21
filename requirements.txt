@@ -1,0 +1,5 @@
+flask>=2.0
+flask_sqlalchemy>=2.5
+pyyaml>=6.0
+pywebview>=4.0
+screeninfo>=0.8
